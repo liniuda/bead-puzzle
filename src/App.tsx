@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from 'react'
+import { HomePage } from './components/HomePage'
 import { GameBoard } from './components/GameBoard'
 import { BeadTray } from './components/BeadTray'
 import { LevelSelector } from './components/LevelSelector'
@@ -18,6 +19,7 @@ export interface TraySlotBead {
 function App() {
   const { unlockedUpTo, completedLevels, isLevelCompleted, markLevelComplete } = useGameProgress()
 
+  const [showHome, setShowHome] = useState(true)
   const [currentLevel, setCurrentLevel] = useState<PuzzleLevel>(LEVELS[0])
   const [showLevelSelector, setShowLevelSelector] = useState(false)
   const [isCompleted, setIsCompleted] = useState(false)
@@ -245,7 +247,11 @@ function App() {
   const isAllComplete = LEVELS.every(l => isLevelCompleted(l.id)) || (isCompleted && currentLevel.order === 10)
 
   return (
-    <div className="min-h-screen flex flex-col max-w-md mx-auto">
+    <>
+      {showHome ? (
+        <HomePage onStart={() => setShowHome(false)} />
+      ) : (
+        <div className="min-h-screen flex flex-col max-w-md mx-auto">
       <GameHeader
         level={currentLevel}
         progress={progress}
@@ -298,6 +304,8 @@ function App() {
         />
       )}
     </div>
+      )}
+    </>
   )
 }
 
