@@ -1,7 +1,7 @@
 /**
  * Central level registry: 10 levels with difficulty progression
  */
-import { type PuzzleLevel, SMALL_LEVELS, BEAD_COLORS } from './patterns'
+import { type PuzzleLevel, SMALL_LEVELS } from './patterns'
 import {
   buildStarGirl,
   buildFlameSpirit,

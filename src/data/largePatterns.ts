@@ -4,7 +4,7 @@
  */
 import {
   createGrid, fillRect, fillCircle, fillEllipse, fillTriangle,
-  fillDiamond, mirrorH, drawLine, fillRing, strokeRect
+  fillDiamond, drawLine, fillRing, strokeRect
 } from './patternBuilder'
 
 /** Level 4: 星之少女 (Star Girl) - 25x25, anime girl face */
