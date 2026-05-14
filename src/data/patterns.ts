@@ -2,7 +2,7 @@
 export const BEAD_COLORS: Record<string, string> = {
   'R': '#DC2626',   // red (deep)
   'P': '#DB2777',   // pink (hot pink)
-  'O': '#EA580C',   // orange (burnt)
+  'O': '#F97316',   // orange (vivid)
   'Y': '#F59E0B',   // yellow (amber)
   'G': '#16A34A',   // green (forest)
   'T': '#0D9488',   // teal (deep)
@@ -20,7 +20,7 @@ export const BEAD_COLORS: Record<string, string> = {
   'F': '#15803D',   // fresh green (emerald)
   'H': '#FDA4AF',   // light pink (salmon)
   'U': '#FCD34D',   // light yellow (gold)
-  'Q': '#FF6B35',   // light orange (tangerine)
+  'Q': '#8B4513',   // saddle brown (outline)
   'E': '#65A30D',   // lime (olive green)
 }
 
