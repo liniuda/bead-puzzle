@@ -1,27 +1,27 @@
-// Color definitions for bead pixel art
+// Color definitions for bead pixel art - high contrast palette
 export const BEAD_COLORS: Record<string, string> = {
-  'R': '#EF4444',   // red
-  'P': '#EC4899',   // pink
-  'O': '#F97316',   // orange
-  'Y': '#FBBF24',   // yellow
-  'G': '#22C55E',   // green
-  'T': '#14B8A6',   // teal
-  'B': '#3B82F6',   // blue
-  'V': '#A855F7',   // violet
-  'N': '#92400E',   // brown
-  'K': '#1F2937',   // black
-  'W': '#F9FAFB',   // white
-  'S': '#FDBA74',   // skin/peach
-  'D': '#6B7280',   // dark gray
-  'L': '#D1D5DB',   // light gray
-  'C': '#06B6D4',   // cyan
-  'M': '#F43F5E',   // magenta
-  'I': '#818CF8',   // indigo
-  'F': '#4ADE80',   // fresh green
-  'H': '#FECDD3',   // light pink
-  'U': '#FDE68A',   // light yellow
-  'Q': '#FB923C',   // light orange
-  'E': '#A3E635',   // lime
+  'R': '#DC2626',   // red (deep)
+  'P': '#DB2777',   // pink (hot pink)
+  'O': '#EA580C',   // orange (burnt)
+  'Y': '#F59E0B',   // yellow (amber)
+  'G': '#16A34A',   // green (forest)
+  'T': '#0D9488',   // teal (deep)
+  'B': '#2563EB',   // blue (royal)
+  'V': '#7C3AED',   // violet (deep purple)
+  'N': '#78350F',   // brown (dark chocolate)
+  'K': '#0F172A',   // black (near black)
+  'W': '#FFFFFF',   // white (pure)
+  'S': '#F5A623',   // skin/peach (warm tan)
+  'D': '#374151',   // dark gray (charcoal)
+  'L': '#E5E7EB',   // light gray (silver)
+  'C': '#0891B2',   // cyan (deep sky)
+  'M': '#E11D48',   // magenta (crimson rose)
+  'I': '#4338CA',   // indigo (deep)
+  'F': '#15803D',   // fresh green (emerald)
+  'H': '#FDA4AF',   // light pink (salmon)
+  'U': '#FCD34D',   // light yellow (gold)
+  'Q': '#FF6B35',   // light orange (tangerine)
+  'E': '#65A30D',   // lime (olive green)
 }
 
 export interface PuzzleLevel {
