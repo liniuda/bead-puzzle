@@ -7,6 +7,7 @@ interface GameBoardProps {
   board: (string | null)[][]
   selectedTrayBead: TraySlotBead | null | undefined
   hintCell: string | null  // "row,col" of highlighted hint cell
+  checkMode: boolean
   onCellClick: (row: number, col: number) => void
   beadColors: Record<string, string>
 }
@@ -15,7 +16,7 @@ const SCROLL_THRESHOLD = 32
 const MIN_CELL_PX = 11
 const MAX_VIEWPORT = 360
 
-export function GameBoard({ level, board, selectedTrayBead, hintCell, onCellClick, beadColors }: GameBoardProps) {
+export function GameBoard({ level, board, selectedTrayBead, hintCell, checkMode, onCellClick, beadColors }: GameBoardProps) {
   const [justPlaced, setJustPlaced] = useState<string | null>(null)
   const [justExtracted, setJustExtracted] = useState<Set<string>>(new Set())
 
@@ -92,6 +93,11 @@ export function GameBoard({ level, board, selectedTrayBead, hintCell, onCellClic
           const beadColor = beadColors[cellColor!] || '#ccc'
           const isWrong = cellColor !== targetColor
           const isHinted = hintCell === cellKey
+          const isCorrect = cellColor === targetColor
+
+          // Check mode: dim correct beads, highlight wrong ones
+          const checkDim = checkMode && isCorrect
+          const checkHighlight = checkMode && isWrong
 
           return (
             <div
@@ -102,6 +108,7 @@ export function GameBoard({ level, board, selectedTrayBead, hintCell, onCellClic
                 ${isNew ? 'animate-bead-pop' : ''}
                 ${isExtracting ? 'animate-bead-remove' : ''}
                 ${isHinted ? 'ring-2 ring-yellow-400 animate-pulse z-10' : ''}
+                ${checkHighlight ? 'ring-2 ring-red-500 z-10' : ''}
               `}
               style={{ backgroundColor: `${bgColor}40` }}
               onClick={() => handleClick(rowIdx, colIdx)}
@@ -109,7 +116,9 @@ export function GameBoard({ level, board, selectedTrayBead, hintCell, onCellClic
               <div
                 className={`
                   w-[90%] h-[90%] rounded-full relative overflow-hidden shadow-bead
-                  ${isWrong ? 'ring-1 ring-red-400/40' : ''}
+                  ${isWrong && !checkMode ? 'ring-1 ring-red-400/40' : ''}
+                  ${checkDim ? 'opacity-30' : ''}
+                  ${checkHighlight ? 'animate-pulse' : ''}
                 `}
                 style={{
                   background: `radial-gradient(circle at 35% 30%, rgba(255,255,255,0.45) 0%, transparent 50%), radial-gradient(circle at 50% 50%, ${beadColor} 0%, ${beadColor} 65%, rgba(0,0,0,0.2) 100%)`,

@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from 'react'
 import { HomePage } from './components/HomePage'
+import { TutorialOverlay } from './components/TutorialOverlay'
 import { GameBoard } from './components/GameBoard'
 import { BeadTray } from './components/BeadTray'
 import { LevelSelector } from './components/LevelSelector'
@@ -20,9 +21,11 @@ function App() {
   const { unlockedUpTo, completedLevels, isLevelCompleted, markLevelComplete } = useGameProgress()
 
   const [showHome, setShowHome] = useState(true)
+  const [showTutorial, setShowTutorial] = useState(() => !localStorage.getItem('bead-puzzle-tutorial-done'))
   const [currentLevel, setCurrentLevel] = useState<PuzzleLevel>(LEVELS[0])
   const [showLevelSelector, setShowLevelSelector] = useState(false)
   const [isCompleted, setIsCompleted] = useState(false)
+  const [checkMode, setCheckMode] = useState(false)
 
   const [initialData] = useState(() => generatePuzzle(LEVELS[0]))
   const [board, setBoard] = useState<(string | null)[][]>(initialData.initialBoard.map(r => [...r]))
@@ -227,20 +230,25 @@ function App() {
     }
   }, [board, currentLevel])
 
-  // Progress
-  const progress = useMemo(() => {
+  // Progress & wrong count
+  const { progress, wrongCount } = useMemo(() => {
     const target = currentLevel.grid
     let total = 0
     let correct = 0
+    let wrong = 0
     for (let r = 0; r < currentLevel.size; r++) {
       for (let c = 0; c < currentLevel.size; c++) {
         if (target[r][c] !== null) {
           total++
           if (board[r][c] === target[r][c]) correct++
+          else if (board[r][c] !== null) wrong++
         }
       }
     }
-    return total === 0 ? 100 : Math.round((correct / total) * 100)
+    return {
+      progress: total === 0 ? 100 : Math.round((correct / total) * 100),
+      wrongCount: wrong,
+    }
   }, [board, currentLevel])
 
   const beadsInTray = tray.filter(s => s !== null).length
@@ -256,9 +264,12 @@ function App() {
         level={currentLevel}
         progress={progress}
         beadsInTray={beadsInTray}
+        wrongCount={wrongCount}
+        checkMode={checkMode}
         onSelectLevel={() => setShowLevelSelector(true)}
         onReset={handleReset}
         onHint={handleHint}
+        onToggleCheck={() => setCheckMode(m => !m)}
       />
 
       <main className="flex-1 flex flex-col items-center justify-center px-2 py-2">
@@ -267,6 +278,7 @@ function App() {
           board={board}
           selectedTrayBead={selectedTrayIdx !== null ? tray[selectedTrayIdx] : null}
           hintCell={hintCell}
+          checkMode={checkMode}
           onCellClick={handleBoardCellClick}
           beadColors={BEAD_COLORS}
         />
@@ -302,6 +314,10 @@ function App() {
           }}
           onReplay={handleReset}
         />
+      )}
+
+      {showTutorial && (
+        <TutorialOverlay onComplete={() => setShowTutorial(false)} />
       )}
     </div>
       )}
