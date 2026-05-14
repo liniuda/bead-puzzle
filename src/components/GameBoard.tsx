@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { type PuzzleLevel } from '../data/patterns'
 import { type TraySlotBead } from '../App'
 
@@ -140,25 +140,125 @@ export function GameBoard({ level, board, selectedTrayBead, hintCell, checkMode,
 
   if (needsScroll) {
     return (
-      <div className="gradient-board rounded-xl p-2 shadow-board">
-        <div
-          className="overflow-auto rounded-lg touch-pan-x touch-pan-y"
-          style={{
-            maxWidth: `${MAX_VIEWPORT}px`,
-            maxHeight: `${MAX_VIEWPORT}px`,
-            WebkitOverflowScrolling: 'touch',
-          }}
-        >
-          {gridContent}
-        </div>
-        <p className="text-xs text-center text-white/50 mt-1">滑动查看完整棋盘</p>
-      </div>
+      <ZoomableBoard maxViewport={MAX_VIEWPORT} boardTotalPx={boardTotalPx}>
+        {gridContent}
+      </ZoomableBoard>
     )
   }
 
   return (
     <div className="gradient-board rounded-xl p-2 shadow-board">
       {gridContent}
+    </div>
+  )
+}
+
+/** Zoomable/pannable wrapper for large boards */
+function ZoomableBoard({ children, maxViewport, boardTotalPx }: { children: React.ReactNode; maxViewport: number; boardTotalPx: number }) {
+  const [scale, setScale] = useState(1)
+  const [translate, setTranslate] = useState({ x: 0, y: 0 })
+  const containerRef = useRef<HTMLDivElement>(null)
+  const pinchRef = useRef<{ startDist: number; startScale: number } | null>(null)
+  const panRef = useRef<{ startX: number; startY: number; startTx: number; startTy: number } | null>(null)
+  const lastTapRef = useRef<number>(0)
+
+  const minScale = 1
+  const maxScale = 3
+
+  const clampTranslate = useCallback((tx: number, ty: number, s: number) => {
+    const overflow = (boardTotalPx * s - maxViewport) / 2
+    if (overflow <= 0) return { x: 0, y: 0 }
+    return {
+      x: Math.max(-overflow, Math.min(overflow, tx)),
+      y: Math.max(-overflow, Math.min(overflow, ty)),
+    }
+  }, [boardTotalPx, maxViewport])
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      // Pinch start
+      const dx = e.touches[1].clientX - e.touches[0].clientX
+      const dy = e.touches[1].clientY - e.touches[0].clientY
+      pinchRef.current = { startDist: Math.hypot(dx, dy), startScale: scale }
+      panRef.current = null
+    } else if (e.touches.length === 1 && scale > 1) {
+      // Pan start (only when zoomed)
+      panRef.current = {
+        startX: e.touches[0].clientX,
+        startY: e.touches[0].clientY,
+        startTx: translate.x,
+        startTy: translate.y,
+      }
+    }
+  }, [scale, translate])
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 2 && pinchRef.current) {
+      e.preventDefault()
+      const dx = e.touches[1].clientX - e.touches[0].clientX
+      const dy = e.touches[1].clientY - e.touches[0].clientY
+      const dist = Math.hypot(dx, dy)
+      const newScale = Math.max(minScale, Math.min(maxScale, pinchRef.current.startScale * (dist / pinchRef.current.startDist)))
+      setScale(newScale)
+      setTranslate(prev => clampTranslate(prev.x, prev.y, newScale))
+    } else if (e.touches.length === 1 && panRef.current && scale > 1) {
+      const dx = e.touches[0].clientX - panRef.current.startX
+      const dy = e.touches[0].clientY - panRef.current.startY
+      const newT = clampTranslate(panRef.current.startTx + dx, panRef.current.startTy + dy, scale)
+      setTranslate(newT)
+    }
+  }, [scale, clampTranslate])
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 0) {
+      pinchRef.current = null
+      panRef.current = null
+
+      // Double-tap to zoom
+      const now = Date.now()
+      if (now - lastTapRef.current < 300) {
+        if (scale > 1) {
+          setScale(1)
+          setTranslate({ x: 0, y: 0 })
+        } else {
+          setScale(2)
+        }
+      }
+      lastTapRef.current = now
+    }
+  }, [scale])
+
+  return (
+    <div className="gradient-board rounded-xl p-2 shadow-board">
+      <div
+        ref={containerRef}
+        className="overflow-hidden rounded-lg relative"
+        style={{ width: maxViewport, height: maxViewport }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div
+          style={{
+            transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
+            transformOrigin: 'center center',
+            transition: pinchRef.current || panRef.current ? 'none' : 'transform 0.2s ease-out',
+          }}
+        >
+          {children}
+        </div>
+      </div>
+      <div className="flex items-center justify-center gap-3 mt-1.5">
+        <button
+          onClick={() => { const s = Math.min(maxScale, scale + 0.5); setScale(s); setTranslate(clampTranslate(translate.x, translate.y, s)) }}
+          className="text-xs px-2 py-0.5 rounded bg-white/20 text-white/70"
+        >+</button>
+        <span className="text-[10px] text-white/50">{Math.round(scale * 100)}%</span>
+        <button
+          onClick={() => { const s = Math.max(minScale, scale - 0.5); setScale(s); setTranslate(clampTranslate(translate.x, translate.y, s)) }}
+          className="text-xs px-2 py-0.5 rounded bg-white/20 text-white/70"
+        >-</button>
+      </div>
     </div>
   )
 }

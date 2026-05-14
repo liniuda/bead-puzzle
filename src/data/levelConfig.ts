@@ -1,5 +1,5 @@
 /**
- * Central level registry: 10 levels with difficulty progression
+ * Central level registry: 20 levels with difficulty progression
  */
 import { type PuzzleLevel, SMALL_LEVELS } from './patterns'
 import {
@@ -11,6 +11,18 @@ import {
   buildDragonLegend,
   buildStarFestival,
 } from './largePatterns'
+import {
+  buildOceanSpirit,
+  buildSteamRobot,
+  buildCherryBlossom,
+  buildSpaceship,
+  buildUnderwaterCity,
+  buildPhoenixGarden,
+  buildCrystalPalace,
+  buildGalaxyBattleship,
+  buildWorldTree,
+  buildCosmicFestival,
+} from './largePatterns2'
 
 // Lazily compute large grids (only when level is selected)
 const gridCache = new Map<string, (string | null)[][]>()
@@ -108,6 +120,127 @@ const largeLevelDefs: Omit<PuzzleLevel, 'grid'>[] = [
     wrongBeadRatio: 0.30,
     traySlots: 28,
   },
+  // --- Levels 11-20 ---
+  {
+    id: 'ocean-spirit',
+    name: '海洋精灵',
+    theme: '海洋',
+    icon: '🧜',
+    size: 25,
+    order: 11,
+    difficulty: 3,
+    removeRatio: 0.15,
+    wrongBeadRatio: 0.22,
+    traySlots: 14,
+  },
+  {
+    id: 'steam-robot',
+    name: '蒸汽机器人',
+    theme: '机甲',
+    icon: '🤖',
+    size: 28,
+    order: 12,
+    difficulty: 3,
+    removeRatio: 0.16,
+    wrongBeadRatio: 0.24,
+    traySlots: 16,
+  },
+  {
+    id: 'cherry-blossom',
+    name: '樱花树',
+    theme: '自然',
+    icon: '🌸',
+    size: 30,
+    order: 13,
+    difficulty: 4,
+    removeRatio: 0.18,
+    wrongBeadRatio: 0.25,
+    traySlots: 18,
+  },
+  {
+    id: 'spaceship',
+    name: '太空飞船',
+    theme: '科幻',
+    icon: '🚀',
+    size: 32,
+    order: 14,
+    difficulty: 4,
+    removeRatio: 0.18,
+    wrongBeadRatio: 0.26,
+    traySlots: 18,
+  },
+  {
+    id: 'underwater-city',
+    name: '海底城市',
+    theme: '幻想',
+    icon: '🏙️',
+    size: 35,
+    order: 15,
+    difficulty: 4,
+    removeRatio: 0.20,
+    wrongBeadRatio: 0.28,
+    traySlots: 20,
+  },
+  {
+    id: 'phoenix-garden',
+    name: '凤凰花园',
+    theme: '幻想',
+    icon: '🦚',
+    size: 38,
+    order: 16,
+    difficulty: 5,
+    removeRatio: 0.20,
+    wrongBeadRatio: 0.28,
+    traySlots: 22,
+  },
+  {
+    id: 'crystal-palace',
+    name: '水晶宫殿',
+    theme: '幻想',
+    icon: '💎',
+    size: 42,
+    order: 17,
+    difficulty: 5,
+    removeRatio: 0.22,
+    wrongBeadRatio: 0.30,
+    traySlots: 24,
+  },
+  {
+    id: 'galaxy-battleship',
+    name: '银河战舰',
+    theme: '科幻',
+    icon: '🛸',
+    size: 45,
+    order: 18,
+    difficulty: 5,
+    removeRatio: 0.22,
+    wrongBeadRatio: 0.30,
+    traySlots: 26,
+  },
+  {
+    id: 'world-tree',
+    name: '世界树',
+    theme: '幻想',
+    icon: '🌍',
+    size: 48,
+    order: 19,
+    difficulty: 5,
+    removeRatio: 0.24,
+    wrongBeadRatio: 0.32,
+    traySlots: 28,
+  },
+  {
+    id: 'cosmic-festival',
+    name: '星际庆典',
+    theme: '庆典',
+    icon: '🎊',
+    size: 55,
+    order: 20,
+    difficulty: 5,
+    removeRatio: 0.25,
+    wrongBeadRatio: 0.35,
+    traySlots: 32,
+  },
 ]
 
 const builders: Record<string, () => (string | null)[][]> = {
@@ -118,9 +251,19 @@ const builders: Record<string, () => (string | null)[][]> = {
   'mecha-phoenix': buildMechaPhoenix,
   'dragon-legend': buildDragonLegend,
   'star-festival': buildStarFestival,
+  'ocean-spirit': buildOceanSpirit,
+  'steam-robot': buildSteamRobot,
+  'cherry-blossom': buildCherryBlossom,
+  'spaceship': buildSpaceship,
+  'underwater-city': buildUnderwaterCity,
+  'phoenix-garden': buildPhoenixGarden,
+  'crystal-palace': buildCrystalPalace,
+  'galaxy-battleship': buildGalaxyBattleship,
+  'world-tree': buildWorldTree,
+  'cosmic-festival': buildCosmicFestival,
 }
 
-// Assemble all 10 levels
+// Assemble all 20 levels
 function buildAllLevels(): PuzzleLevel[] {
   // Levels 1-3 from hand-crafted patterns
   const levels: PuzzleLevel[] = [...SMALL_LEVELS]

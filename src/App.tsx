@@ -252,7 +252,7 @@ function App() {
   }, [board, currentLevel])
 
   const beadsInTray = tray.filter(s => s !== null).length
-  const isAllComplete = LEVELS.every(l => isLevelCompleted(l.id)) || (isCompleted && currentLevel.order === 10)
+  const isAllComplete = LEVELS.every(l => isLevelCompleted(l.id)) || (isCompleted && currentLevel.order === 20)
 
   return (
     <>

@@ -58,7 +58,7 @@ export function CelebrationOverlay({ level, isAllComplete, onNextLevel, onReplay
             全部通关！
           </h2>
           <p className="text-muted-foreground mb-6">
-            恭喜你完成了全部10个关卡！你是拼豆大师！
+            恭喜你完成了全部20个关卡！你是拼豆大师！
           </p>
 
           <button
@@ -87,7 +87,7 @@ export function CelebrationOverlay({ level, isAllComplete, onNextLevel, onReplay
           你成功完成了「{level.icon} {level.name}」！超级解压～
         </p>
         <p className="text-xs text-muted-foreground mb-6">
-          第 {level.order}/10 关
+          第 {level.order}/20 关
         </p>
 
         <div className="flex flex-col gap-3">

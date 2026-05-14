@@ -77,9 +77,9 @@ export function HomePage({ onStart }: HomePageProps) {
 
         {/* Level info */}
         <div className="flex items-center gap-4 text-xs text-gray-400 mt-2">
-          <span>10 关卡</span>
+          <span>20 关卡</span>
           <span className="w-1 h-1 rounded-full bg-gray-300" />
-          <span>20x20 ~ 50x50</span>
+          <span>20x20 ~ 55x55</span>
           <span className="w-1 h-1 rounded-full bg-gray-300" />
           <span>逐级解锁</span>
         </div>
