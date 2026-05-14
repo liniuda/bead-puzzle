@@ -111,10 +111,15 @@ export function GameBoard({ level, board, selectedTrayBead, hintCell, onCellClic
                   w-[90%] h-[90%] rounded-full relative overflow-hidden shadow-bead
                   ${isWrong ? 'ring-1 ring-red-400/40' : ''}
                 `}
-                style={{ backgroundColor: beadColor }}
+                style={{
+                  background: `radial-gradient(circle at 35% 30%, rgba(255,255,255,0.45) 0%, transparent 50%), radial-gradient(circle at 50% 50%, ${beadColor} 0%, ${beadColor} 65%, rgba(0,0,0,0.2) 100%)`,
+                }}
               >
                 {cellPx >= 14 && (
-                  <div className="absolute top-[8%] left-[12%] w-[20%] h-[20%] rounded-full bg-white/30" />
+                  <>
+                    <div className="absolute top-[10%] left-[15%] w-[22%] h-[18%] rounded-full bg-white/50 blur-[0.5px]" />
+                    <div className="absolute bottom-[15%] right-[18%] w-[10%] h-[10%] rounded-full bg-white/20" />
+                  </>
                 )}
               </div>
             </div>

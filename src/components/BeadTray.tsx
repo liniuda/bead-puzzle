@@ -47,10 +47,11 @@ export function BeadTray({ tray, selectedIdx, onSlotClick, beadColors }: BeadTra
                   style={{
                     width: beadSize,
                     height: beadSize,
-                    backgroundColor: beadColors[slot.color] || '#ccc',
+                    background: `radial-gradient(circle at 35% 30%, rgba(255,255,255,0.45) 0%, transparent 50%), radial-gradient(circle at 50% 50%, ${beadColors[slot.color] || '#ccc'} 0%, ${beadColors[slot.color] || '#ccc'} 65%, rgba(0,0,0,0.2) 100%)`,
                   }}
                 >
-                  <div className="absolute top-[8%] left-[12%] w-[24%] h-[24%] rounded-full bg-white/35" />
+                  <div className="absolute top-[10%] left-[15%] w-[22%] h-[18%] rounded-full bg-white/50 blur-[0.5px]" />
+                  <div className="absolute bottom-[15%] right-[18%] w-[10%] h-[10%] rounded-full bg-white/20" />
                 </div>
               )}
             </button>
